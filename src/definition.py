@@ -46,3 +46,52 @@ class SourceCode:
 
     def __repr__(self) -> str:
         return 'SourceCode({}, {})'.format(self.line_num, self.statements)
+
+
+class Direction:
+    direction_list = ('in', 'out')
+
+    def __init__(self, direction):
+        if direction.lower() not in self.direction_list:
+            raise ValueError
+        self.direction = direction
+
+    def __repr__(self):
+        return str(self.direction)
+
+    def __eq__(self, other):
+        return self.direction.lower() == other
+
+
+class Type(Statement):
+    type_list = ('integer', 'char')
+
+    def __init__(self, type):
+        if type.lower() not in self.type_list:
+            raise ValueError
+        self.type = type
+
+    def __repr__(self):
+        return 'Type {}'.format(self.type)
+
+
+class Param(Statement):
+
+    def __init__(self, lin_num: int, variable: Variable, type: Type, direction: Direction):
+        self.lin_num = lin_num
+        self.variable = variable
+        self.type = type
+        self.direction = direction
+
+    def __repr__(self) -> str:
+        return '{} {} {}'.format(self.variable, self.type, self.direction)
+
+
+class Procedure(Statement):
+    def __init__(self, lin_num: int, variable: Variable, params: List[Param]):
+        self.lin_num = lin_num
+        self.variable = variable
+        self.params = params
+
+    def __repr__(self) -> str:
+        return 'Procedure {}({})'.format(self.variable, ','.join(str(self.params)))

@@ -19,11 +19,33 @@ class TokenType(Enum):
     TOKEN_NAME = 7
     TOKEN_PRINT = 8
     TOKEN_IGNORED = 9
+    TOKEN_PROCEDURE = 10
+    TOKEN_IN = 11
+    TOKEN_OUT = 12
+    TOKEN_INTEGER = 13
+    TOKEN_CHAR = 14
+    TOKEN_COLON = 15
+    TOKEN_COMMA = 16
 
 
 KEYWORDS = {
-    'print': TokenType.TOKEN_PRINT
+    'print': TokenType.TOKEN_PRINT,
+    'procedure': TokenType.TOKEN_PROCEDURE,
+    'in': TokenType.TOKEN_IN,
+    'out': TokenType.TOKEN_OUT,
+    'integer': TokenType.TOKEN_INTEGER,
+    'char': TokenType.TOKEN_CHAR,
+    ':': TokenType.TOKEN_COLON,
+    ',': TokenType.TOKEN_COMMA
 }
+
+
+TYPE = (TokenType.TOKEN_INTEGER,
+        TokenType.TOKEN_CHAR)
+
+
+DIRECTION = (TokenType.TOKEN_IN,
+             TokenType.TOKEN_OUT)
 
 
 class TokenInfo:
@@ -52,7 +74,8 @@ class Lexer:
         return self.head >= len(self.source_code)
 
     def scan_pattern(self, pattern) -> str:
-        result = re.findall(pattern, self.source_code[self.head:])
+        print(self.source_code[self.head:])
+        result = re.findall(pattern, self.source_code[self.head:], flags=re.I)
         if len(result) != 1:
             raise LexerException(
                 'scan_pattern(): returned unexpected result: {} for pattern {}'.format(
@@ -64,6 +87,12 @@ class Lexer:
 
     def scan_ignored(self) -> str:
         return self.scan_pattern(r'^[\t\n\v\f\r ]+')
+
+    def scan_direction(self) -> str:
+        return self.scan_pattern(r'in|out')
+
+    def scan_type(self) -> str:
+        return self.scan_name()
 
     def scan_before_token(self, token: str) -> str:
         result = self.source_code[self.head:].split(token)
@@ -116,9 +145,9 @@ class Lexer:
             return TokenInfo(self.line_num, TokenType.TOKEN_QUOTE, '"')
         if next_chr == '_' or next_chr.isalpha():
             name = self.scan_name()
-            if name in KEYWORDS:
+            if name.lower() in KEYWORDS:
                 self.head += len(name)
-                return TokenInfo(self.line_num, KEYWORDS[name], name)
+                return TokenInfo(self.line_num, KEYWORDS[name.lower()], name)
             self.head += len(name)
             return TokenInfo(self.line_num, TokenType.TOKEN_NAME, name)
         if next_chr in ['\t', '\n', '\v', '\f', '\r', ' ']:
@@ -139,6 +168,7 @@ class Lexer:
         return next_token_info
 
     def look_ahead(self) -> TokenType:
+        # print(self.next_token_info)
         if self.next_token_info is None:
             self.next_token_info = self.get_next_token()
         return self.next_token_info.token_type
