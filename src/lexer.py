@@ -74,7 +74,7 @@ class Lexer:
         return self.head >= len(self.source_code)
 
     def scan_pattern(self, pattern) -> str:
-        print(self.source_code[self.head:])
+        # print(self.source_code[self.head:])
         result = re.findall(pattern, self.source_code[self.head:], flags=re.I)
         if len(result) != 1:
             raise LexerException(
@@ -156,6 +156,12 @@ class Lexer:
             self.head += len(ignored)
             self.process_new_line(ignored)
             return TokenInfo(line_num, TokenType.TOKEN_IGNORED, ignored)
+        if next_chr == ',':
+            self.head += 1
+            return TokenInfo(self.line_num, TokenType.TOKEN_COMMA, ',')
+        if next_chr == ':':
+            self.head += 1
+            return TokenInfo(self.line_num, TokenType.TOKEN_COLON, ':')
         
         raise LexerException('get_next_token(): unexpected symbol {}'.format(next_chr))
 

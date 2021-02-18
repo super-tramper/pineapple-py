@@ -8,13 +8,9 @@ from src.parser import parse
 class Interpreter:
 
     def __init__(self, source_code: str):
-        print('l1')
         self.lexer = Lexer(source_code)
-        print('l2')
         self.ast = parse(self.lexer)
-        print('l3')
         self.variables = {}
-        print('l4')
         self.procedure = None
 
     def resolve_print(self, print_statement: Print) -> None:

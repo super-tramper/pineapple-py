@@ -57,7 +57,7 @@ class Direction:
         self.direction = direction
 
     def __repr__(self):
-        return str(self.direction)
+        return 'Direction({})'.format(self.direction)
 
     def __eq__(self, other):
         return self.direction.lower() == other
@@ -72,26 +72,26 @@ class Type(Statement):
         self.type = type
 
     def __repr__(self):
-        return 'Type {}'.format(self.type)
+        return 'Type({})'.format(self.type)
 
 
 class Param(Statement):
 
-    def __init__(self, lin_num: int, variable: Variable, type: Type, direction: Direction):
-        self.lin_num = lin_num
+    def __init__(self, line_num: int, variable: Variable, type: Type, direction: Direction):
+        self.line_num = line_num
         self.variable = variable
         self.type = type
         self.direction = direction
 
     def __repr__(self) -> str:
-        return '{} {} {}'.format(self.variable, self.type, self.direction)
+        return 'Param({},{},{})'.format(self.variable, self.type, self.direction)
 
 
 class Procedure(Statement):
-    def __init__(self, lin_num: int, variable: Variable, params: List[Param]):
-        self.lin_num = lin_num
+    def __init__(self, line_num: int, variable: Variable, params: List[Param]):
+        self.line_num = line_num
         self.variable = variable
         self.params = params
 
     def __repr__(self) -> str:
-        return 'Procedure {}({})'.format(self.variable, ','.join(str(self.params)))
+        return 'Procedure {}({})'.format(self.variable, self.params)
