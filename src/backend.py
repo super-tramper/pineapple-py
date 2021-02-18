@@ -33,9 +33,19 @@ class Interpreter:
             raise RuntimeError(
                 'resolve_statement(): unexpected statement type: {}'.format(statement))
 
+    def parse(self, statement: Statement):
+        if isinstance(statement, Procedure):
+            return self.parse_procedure(statement)
+
+    def parse_procedure(self, procedure: Procedure):
+        params = [i.variable.name for i in procedure.params if i.direction.direction == 'in']
+        return 'def {}({}):\n'.format(procedure.variable.name, ' ,'.join(params))
+
     def resolve_source_code(self, ast: SourceCode) -> None:
-        for statement in ast.statements:
-            self.resolve_statement(statement)
+        with open('./out.py', 'w') as f:
+            for statement in ast.statements:
+                self.resolve_statement(statement)
+                f.write(self.parse(statement))
 
     def execute(self) -> None:
         self.resolve_source_code(self.ast)
