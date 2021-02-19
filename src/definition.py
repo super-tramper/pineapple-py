@@ -84,7 +84,7 @@ class Param(Statement):
         self.direction = direction
 
     def __repr__(self) -> str:
-        return 'Param({},{},{})'.format(self.variable, self.type, self.direction)
+        return 'Param({},{},{})'.format(self.variable.name, self.type.type, self.direction.direction)
 
 
 class Procedure(Statement):
@@ -94,4 +94,47 @@ class Procedure(Statement):
         self.params = params
 
     def __repr__(self) -> str:
-        return 'Procedure {}({})'.format(self.variable, self.params)
+        return 'Procedure {}({})'.format(self.variable.name, self.params)
+
+
+class VariableStatement(Statement):
+    def __init__(self, line_num: int, variable: Variable, type: Type):
+        self.line_num = line_num
+        self.variable = variable
+        self.type = type
+
+    def __repr__(self):
+        return 'Statement {} {}'.format(self.variable.name, self.type.type)
+
+
+class Begin(Statement):
+    def __init__(self, line_num):
+        self.line_num = line_num
+
+    def __repr__(self):
+        return '{} BEGIN'.format(self.line_num)
+
+
+class Execute(Statement):
+    def __init__(self, line_num, sql):
+        self.line_num = line_num
+        self.sql = sql
+
+    def __repr__(self):
+        return '{} Execute {}'.format(self.line_num, self.sql)
+
+
+class End(Statement):
+    def __init__(self, line_num):
+        self.line_num = line_num
+
+    def __repr__(self):
+        return '{} End'.format(self.line_num)
+
+
+class Ignored(Statement):
+    def __init__(self, line_num):
+        self.line_num = line_num
+
+    def __repr__(self):
+        return '{} Ignored'.format(self.line_num)

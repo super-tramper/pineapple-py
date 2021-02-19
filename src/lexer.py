@@ -26,6 +26,17 @@ class TokenType(Enum):
     TOKEN_CHAR = 14
     TOKEN_COLON = 15
     TOKEN_COMMA = 16
+    TOKEN_CREATE = 17
+    TOKEN_OR = 18
+    TOKEN_REPLACE = 19
+    TOKEN_IS = 20
+    TOKEN_SEMICOLON = 21
+    TOKEN_BEGIN = 22
+    TOKEN_END = 23
+    TOKEN_EXECUTE = 24
+    TOKEN_IMMEDIATE = 25
+    TOKEN_SINGLEQUOTE = 26
+    TOKEN_DUOSINGLEQUOTE = 27
 
 
 KEYWORDS = {
@@ -36,7 +47,17 @@ KEYWORDS = {
     'integer': TokenType.TOKEN_INTEGER,
     'char': TokenType.TOKEN_CHAR,
     ':': TokenType.TOKEN_COLON,
-    ',': TokenType.TOKEN_COMMA
+    ',': TokenType.TOKEN_COMMA,
+    'create': TokenType.TOKEN_CREATE,
+    'or': TokenType.TOKEN_OR,
+    'replace': TokenType.TOKEN_REPLACE,
+    'is': TokenType.TOKEN_IS,
+    ';': TokenType.TOKEN_SEMICOLON,
+    'begin': TokenType.TOKEN_BEGIN,
+    'end': TokenType.TOKEN_END,
+    'execute': TokenType.TOKEN_EXECUTE,
+    'immediate': TokenType.TOKEN_IMMEDIATE,
+
 }
 
 
@@ -141,8 +162,14 @@ class Lexer:
             if self.next_source_code_is('""'):
                 self.head += 2
                 return TokenInfo(self.line_num, TokenType.TOKEN_DUOQUOTE, '""')
+            if self.next_source_code_is("''"):
+                self.head += 2
+                return TokenInfo(self.line_num, TokenType.TOKEN_DUOSINGLEQUOTE, "''")
             self.head += 1
             return TokenInfo(self.line_num, TokenType.TOKEN_QUOTE, '"')
+        if next_chr == "'":
+            self.head += 1
+            return TokenInfo(self.line_num, TokenType.TOKEN_SINGLEQUOTE, "'")
         if next_chr == '_' or next_chr.isalpha():
             name = self.scan_name()
             if name.lower() in KEYWORDS:
@@ -162,6 +189,9 @@ class Lexer:
         if next_chr == ':':
             self.head += 1
             return TokenInfo(self.line_num, TokenType.TOKEN_COLON, ':')
+        if next_chr == ';':
+            self.head += 1
+            return TokenInfo(self.line_num, TokenType.TOKEN_SEMICOLON, ';')
         
         raise LexerException('get_next_token(): unexpected symbol {}'.format(next_chr))
 
