@@ -94,7 +94,6 @@ class Interpreter:
     def resolve_source_code(self, ast: SourceCode) -> None:
         with open('./out.py', 'w') as f:
             for statement in ast.statements:
-                print(statement)
                 self.resolve_statement(statement)
                 f.write(self.parse(statement))
 

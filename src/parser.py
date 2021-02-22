@@ -215,6 +215,4 @@ def parse(lexer: Lexer) -> SourceCode:
     line_num = lexer.line_num
     while lexer.look_ahead() != TokenType.TOKEN_EOF:
         statements.append(parse_statement(lexer))
-    for i in statements:
-        print(i)
     return SourceCode(line_num, statements)
