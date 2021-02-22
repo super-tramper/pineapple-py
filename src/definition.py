@@ -25,7 +25,7 @@ class Assignment(Statement):
         self.string = string
 
     def __repr__(self) -> str:
-        return 'Assignment({}, {}, {})'.format(self.line_num, self.variable, self.string)
+        return '{} Assignment({}, {})'.format(self.line_num, self.variable, self.string)
 
 
 class Print(Statement):
@@ -84,7 +84,7 @@ class Param(Statement):
         self.direction = direction
 
     def __repr__(self) -> str:
-        return 'Param({},{},{})'.format(self.variable.name, self.type.type, self.direction.direction)
+        return '{} Param({},{},{})'.format(self.line_num, self.variable.name, self.type.type, self.direction.direction)
 
 
 class Procedure(Statement):
@@ -94,7 +94,7 @@ class Procedure(Statement):
         self.params = params
 
     def __repr__(self) -> str:
-        return 'Procedure {}({})'.format(self.variable.name, self.params)
+        return '{} Procedure {}({})'.format(self.line_num, self.variable.name, self.params)
 
 
 class VariableStatement(Statement):
@@ -104,7 +104,7 @@ class VariableStatement(Statement):
         self.type = type
 
     def __repr__(self):
-        return 'Statement {} {}'.format(self.variable.name, self.type.type)
+        return '{} VariableStatement {} {}'.format(self.line_num, self.variable.name, self.type.type)
 
 
 class Begin(Statement):
